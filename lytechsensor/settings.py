@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sensor',
     'rest_framework',
+    'rest_framework_swagger',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -124,14 +126,29 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
-
-REST_FRAMEWORK = {
+    ],
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissions',
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
     )
 }
+
+SWAGGER_SETTINGS = {
+    'LOGIN_URL': 'rest_framework:login',
+    'LOGOUT_URL': 'rest_framework:logout',
+    'USE_SESSION_AUTH': True,
+    'DOC_EXPANSION': 'list',
+    'APIS_SORTER': 'alpha'
+}
+
+#
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.DjangoModelPermissions',
+#     )
+# }
 
 
 # Static files (CSS, JavaScript, Images)

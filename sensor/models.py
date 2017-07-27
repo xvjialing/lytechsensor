@@ -2,21 +2,41 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
-# Create your models here.
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 class TemperatureSensor(models.Model):
     deviceId=models.CharField(max_length=32,unique=True)
-    temperature=models.FloatField(max_length=32,null=True)
+    type=models.TextField(null=True)
     maxTemperature=models.FloatField(max_length=32,null=True)
     minTemperature=models.FloatField(max_length=32,null=True)
-    pub_time=models.DateField(auto_now_add=True,null=True)
+    create_time=models.DateField(auto_now_add=True,null=True)
 
     class Meta:
         ordering = ('deviceId',)
 
     def __unicode__(self):
         return self.deviceId
+
+class TemperatureMsg(models.Model):
+    temperature = models.FloatField(max_length=32, null=True)
+    pub_time=models.DateField(auto_now_add=True,null=True)
+    temperatureSensor=models.ForeignKey(TemperatureSensor)
+
+    class Meta:
+        ordering=('temperatureSensor',)
+
+    def __unicode__(self):
+        return unicode(self.temperatureSensor)
 
 class FlameSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
