@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import TemperatureSensor, FlameSensor,HeartbeatSensor,HallMagneticSensor,SoundSensor,TouchSensor,HumiditySensor,InfraredSensor,LightSensor,VibrationSensor
-from .models import Task
-from serializers import TaskSerializer
-from rest_framework.decorators import api_view, permission_classes
+from .models import TemperatureMsg,FlameMsg
+from serializers import TemperatureSensorSerializer,FlameSensorSerializer
+from serializers import TemperatureMsgSerializer
+from rest_framework.decorators import permission_classes
 from rest_framework import permissions
 from rest_framework import mixins,generics
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+import json
 # 第三种方式：装饰器 api_view
 # @api_view(['GET', 'POST'])
 # @permission_classes((permissions.AllowAny,))
@@ -49,12 +55,86 @@ from rest_framework.authtoken.models import Token
 #         task.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@csrf_exempt
+def register(request):
+    if request.method=='POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        email=request.POST.get('email')
+        user=User.objects.create_user(username,email,password)
+        # s=user.save()
+        return HttpResponse(json.dumps(user), content_type="application/json")
+    else:
+        response={}
+        response['msg']='只允许post方法'
+        return HttpResponse(json.dumps(response), content_type="application/json")
+
+# # @permission_classes((permissions.AllowAny,))
+# class TaskList(mixins.ListModelMixin,
+#                mixins.CreateModelMixin,
+#                generics.GenericAPIView):
+#     queryset = Task.objects.all()
+#     serializer_class = TaskSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+#
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+#
+# # @permission_classes((permissions.AllowAny,))
+# class TaskDetail(mixins.RetrieveModelMixin,
+#                     mixins.UpdateModelMixin,
+#                     mixins.DestroyModelMixin,
+#                     generics.GenericAPIView):
+#     queryset = Task.objects.all()
+#     serializer_class = TaskSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+#
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+#
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
+
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
 # @permission_classes((permissions.AllowAny,))
-class TaskList(mixins.ListModelMixin,
-               mixins.CreateModelMixin,
-               generics.GenericAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+# class UserList(mixins.ListModelMixin,
+#                mixins.CreateModelMixin,
+#                generics.GenericAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+#
+# class UserDetail(mixins.RetrieveModelMixin,
+#                     mixins.UpdateModelMixin,
+#                     mixins.DestroyModelMixin,
+#                     generics.GenericAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+#
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+#
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
+class TemperatureSensorList(mixins.ListModelMixin,
+                mixins.CreateModelMixin,
+                generics.GenericAPIView):
+    queryset = TemperatureSensor.objects.all()
+    serializer_class = TemperatureSensorSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -62,13 +142,40 @@ class TaskList(mixins.ListModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-# @permission_classes((permissions.AllowAny,))
-class TaskDetail(mixins.RetrieveModelMixin,
+class TemperatureSensorDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
                     generics.GenericAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+    queryset = TemperatureSensor.objects.all()
+    serializer_class = TemperatureSensorSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+class TemperatureMsgList(mixins.ListModelMixin,
+                mixins.CreateModelMixin,
+                generics.GenericAPIView):
+    queryset = TemperatureMsg.objects.all()
+    serializer_class = TemperatureMsgSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+class TemperatureMsgDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    queryset = TemperatureMsg.objects.all()
+    serializer_class = TemperatureMsgSerializer
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -80,6 +187,32 @@ class TaskDetail(mixins.RetrieveModelMixin,
         return self.destroy(request, *args, **kwargs)
 
 
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+
+
+class FlameSensorList(mixins.ListModelMixin,
+                mixins.CreateModelMixin,
+                generics.GenericAPIView):
+    queryset = FlameSensor.objects.all()
+    serializer_class = FlameSensorSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+class FlameSensorDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    queryset = TemperatureSensor.objects.all()
+    serializer_class = FlameSensorSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

@@ -30,7 +30,7 @@ class TemperatureSensor(models.Model):
 class TemperatureMsg(models.Model):
     temperature = models.FloatField(max_length=32, null=True)
     pub_time=models.DateField(auto_now_add=True,null=True)
-    temperatureSensor=models.ForeignKey(TemperatureSensor)
+    temperatureSensor=models.ForeignKey(TemperatureSensor, related_name='temperatureMsgs')
 
     class Meta:
         ordering=('temperatureSensor',)
@@ -40,9 +40,23 @@ class TemperatureMsg(models.Model):
 
 class FlameSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    create_time = models.DateField(auto_now_add=True, null=True)
 
     def __unicode__(self):
         return self.deviceId
+
+    class Meta:
+        ordering=('deviceId',)
+
+class FlameMsg(models.Model):
+    flameSensor=models.ForeignKey(FlameSensor)
+
+    class Meta:
+        ordering=('flameSensor',)
+
+    def __unicode__(self):
+        return unicode(self.flameSensor)
 
 class HeartbeatSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
