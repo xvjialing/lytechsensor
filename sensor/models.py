@@ -41,6 +41,8 @@ class TemperatureMsg(models.Model):
 class FlameSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
     type = models.TextField(null=True)
+    max_wavelength=models.FloatField(null=True)
+    status = models.BooleanField(default=False)
     create_time = models.DateField(auto_now_add=True, null=True)
 
     def __unicode__(self):
@@ -50,7 +52,10 @@ class FlameSensor(models.Model):
         ordering=('deviceId',)
 
 class FlameMsg(models.Model):
-    flameSensor=models.ForeignKey(FlameSensor)
+    wavelength=models.FloatField(null=True)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    status=models.BooleanField(default=False)
+    flameSensor=models.ForeignKey(FlameSensor, related_name='flameMsgs')
 
     class Meta:
         ordering=('flameSensor',)
@@ -60,28 +65,101 @@ class FlameMsg(models.Model):
 
 class HeartbeatSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
+    status=models.BooleanField(default=False)
+    type = models.TextField(null=True)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
 
     def __unicode__(self):
         return self.deviceId
+
+class HeartbeatMsg(models.Model):
+    heartRate=models.FloatField(null=False)
+    status=models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    heartbeatSensor = models.ForeignKey(HeartbeatSensor, related_name='heartbeatMsgs')
+
+    class Meta:
+        ordering=('heartbeatSensor',)
+
+    def __unicode__(self):
+        return unicode(self.heartbeatSensor)
 
 class HallMagneticSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
-    magnetic =models.FloatField
+    SettingMagnetic =models.FloatField(null=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
 
     def __unicode__(self):
         return self.deviceId
+
+class HallSensorMsg(models.Model):
+    MagnetiStrength = models.FloatField(null=False)
+    status = models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    hallMagneticSensor=models.ForeignKey(HallMagneticSensor,related_name='hallSensorMsgs')
+
+    class Meta:
+        ordering=('hallMagneticSensor',)
+
+    def __unicode__(self):
+        return unicode(self.hallMagneticSensor)
 
 class SoundSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
 
     def __unicode__(self):
         return self.deviceId
 
+
+class SoundSensorMsg(models.Model):
+    xAxis=models.FloatField(null=False)
+    yAxis=models.FloatField(null=False)
+    status = models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    soundSensor=models.ForeignKey(SoundSensor,related_name='soundSensorMsgs')
+
+    class Meta:
+        ordering=('soundSensor',)
+
+    def __unicode__(self):
+        return unicode(self.soundSensor)
+
 class TouchSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
 
     def __unicode__(self):
         return  self.deviceId
+
+class TouchSensorMsg(models.Model):
+    status = models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    touchSensor=models.ForeignKey(TouchSensor,related_name='touchSensorMsgs')
+
+    class Meta:
+        ordering=('touchSensor',)
+
+    def __unicode__(self):
+        return unicode(self.touchSensor)
 
 class HumiditySensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
