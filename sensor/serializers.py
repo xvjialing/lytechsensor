@@ -1,25 +1,8 @@
 from rest_framework import serializers
-from .models import TemperatureSensor,FlameSensor,HeartbeatSensor,HallMagneticSensor,SoundSensor,TouchSensor
-from .models import TemperatureMsg,FlameMsg,HeartbeatMsg,HallSensorMsg,SoundSensorMsg,TouchSensorMsg
+from .models import TemperatureSensor,FlameSensor,HeartbeatSensor,HallMagneticSensor,SoundSensor,TouchSensor,HumiditySensor
+from .models import TemperatureMsg,FlameMsg,HeartbeatMsg,HallSensorMsg,SoundSensorMsg,TouchSensorMsg,HumiditySensorMsg
+import models
 from django.contrib.auth.models import User
-
-# class TemperatureSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model=TemperatureSensor
-#         fields=('id','deviceId','temperature','maxTemperature','minTemperature','pub_time')
-
-
-# class TaskSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Task
-#         fields = ('id', 'title', 'description', 'completed', 'create_date')
-
-
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('id', 'username','password','email')
-
 
 class TemperatureMsgSerializer(serializers.ModelSerializer):
     class Meta:
@@ -93,6 +76,85 @@ class TouchSensorSerializer(serializers.ModelSerializer):
     class Meta:
         model=TouchSensor
         fields=('id','deviceId','type','status','create_time','touchSensorMsgs')
+
+
+class TiltSensorMsgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.TiltSensorMsg
+        fields=('id','status','pub_time','tiltSensor')
+
+class TiltSensorSerializer(serializers.ModelSerializer):
+    tiltSensorMsgs=TiltSensorMsgSerializer(many=True,read_only=True)
+
+    class Meta:
+        model=models.TiltSensor
+        fields=('id','deviceId','type','status','create_time','tiltSensorMsgs')
+
+
+class HumiditySensorMsgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=HumiditySensorMsg
+        fields=('id','humidity','status','pub_time','humiditySensor')
+
+class HumiditySensorSerializer(serializers.ModelSerializer):
+    humiditySensorMsgs=HumiditySensorMsgSerializer(many=True,read_only=True)
+
+    class Meta:
+        model=HumiditySensor
+        fields=('id','deviceId','type','status','create_time','humiditySensorMsgs')
+
+
+class InfraredSensorMsgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.InfraredSensorMsg
+        fields=('id','status','pub_time','infraredSensor')
+
+class InfraredSensorSerializer(serializers.ModelSerializer):
+    infraredSensorMsgs=InfraredSensorMsgSerializer(many=True,read_only=True)
+
+    class Meta:
+        model=models.InfraredSensor
+        fields=('id','deviceId','type','status','create_time','infraredSensorMsgs')
+
+
+class LightSensorMsgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.LightSensorMsg
+        fields=('id','status','lightIntensity','pub_time','lightSensor')
+
+class LightSensorSerializer(serializers.ModelSerializer):
+    lightSensorMsgs=LightSensorMsgSerializer(many=True,read_only=True)
+
+    class Meta:
+        model=models.LightSensor
+        fields=('id','deviceId','type','status','create_time','lightSensorMsgs')
+
+
+class VibrationSensorMsgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.VibrationSensorMsg
+        fields=('id','xAxis','yAxis','status','pub_time','vibrationSensor')
+
+class VibrationSensorSerializer(serializers.ModelSerializer):
+    vibrationSensorMsgs=VibrationSensorMsgSerializer(many=True,read_only=True)
+
+    class Meta:
+        model=models.VibrationSensor
+        fields=('id','deviceId','type','status','create_time','vibrationSensorMsgs')
+
+class SwitchSensorMsgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.SwitchSensorMsg
+        fields=('id','status','pub_time','switchSensor')
+
+class SwitchSensorSerializer(serializers.ModelSerializer):
+    switchSensorMsgs=SwitchSensorMsgSerializer(many=True,read_only=True)
+
+    class Meta:
+        model=models.SwitchSensor
+        fields=('id','deviceId','type','status','create_time','switchSensorMsgs')
+
+
 
 
 

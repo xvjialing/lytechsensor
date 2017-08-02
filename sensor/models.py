@@ -161,38 +161,150 @@ class TouchSensorMsg(models.Model):
     def __unicode__(self):
         return unicode(self.touchSensor)
 
-class HumiditySensor(models.Model):
+class TiltSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
 
     def __unicode__(self):
         return self.deviceId
+
+class TiltSensorMsg(models.Model):
+    status = models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    tiltSensor = models.ForeignKey(TouchSensor, related_name='tiltSensorMsgs')
+
+    class Meta:
+        ordering=('tiltSensor',)
+
+    def __unicode__(self):
+        return unicode(self.tiltSensor)
+
+class HumiditySensor(models.Model):
+    deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
+
+    def __unicode__(self):
+        return self.deviceId
+
+class HumiditySensorMsg(models.Model):
+    humidity=models.FloatField(null=False)
+    status = models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    humiditySensor = models.ForeignKey(HumiditySensor, related_name='humiditySensorMsgs')
+
+    class Meta:
+        ordering=('humiditySensor',)
+
+    def __unicode__(self):
+        return unicode(self.humiditySensor)
 
 class InfraredSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
 
     def __unicode__(self):
         return self.deviceId
+
+
+class InfraredSensorMsg(models.Model):
+    status = models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    infraredSensor = models.ForeignKey(InfraredSensor, related_name='infraredSensorMsgs')
+
+    class Meta:
+        ordering=('infraredSensor',)
+
+    def __unicode__(self):
+        return unicode(self.infraredSensor)
 
 class LightSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
 
     def __unicode__(self):
         return self.deviceId
+
+class LightSensorMsg(models.Model):
+    status = models.BooleanField(default=False)
+    lightIntensity=models.FloatField(null=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    lightSensor = models.ForeignKey(LightSensor, related_name='lightSensorMsgs')
+
+    class Meta:
+        ordering=('lightSensor',)
+
+    def __unicode__(self):
+        return unicode(self.lightSensor)
 
 class VibrationSensor(models.Model):
     deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering=('deviceId',)
 
     def __unicode__(self):
         return self.deviceId
 
-class Task(models.Model):
-    title = models.CharField('标题', max_length=100)
-    description = models.TextField('描述')
-    completed = models.BooleanField('是否完成', default=False)
-    create_date = models.DateTimeField('创建时间', auto_now_add=True)
+
+class VibrationSensorMsg(models.Model):
+    xAxis = models.FloatField(null=False)
+    yAxis = models.FloatField(null=False)
+    status = models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    vibrationSensor = models.ForeignKey(VibrationSensor, related_name='vibrationSensorMsgs')
+
+    class Meta:
+        ordering=('vibrationSensor',)
 
     def __unicode__(self):
-        return self.title
+        return unicode(self.vibrationSensor)
+
+class SwitchSensor(models.Model):
+    deviceId = models.CharField(max_length=32, unique=True)
+    type = models.TextField(null=True)
+    status = models.BooleanField(default=False)
+    create_time = models.DateField(auto_now_add=True, null=True)
+
+    class Meta:
+        ordering = ('deviceId',)
+
+    def __unicode__(self):
+        return self.deviceId
+
+class SwitchSensorMsg(models.Model):
+    status = models.BooleanField(default=False)
+    pub_time = models.DateField(auto_now_add=True, null=True)
+    switchSensor = models.ForeignKey(SwitchSensor, related_name='switchSensorMsgs')
+
+    class Meta:
+        ordering=('switchSensor',)
+
+    def __unicode__(self):
+        return unicode(self.switchSensor)
+
 
 
 

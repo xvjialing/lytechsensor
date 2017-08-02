@@ -48,10 +48,49 @@ urlpatterns = [
     url(r'^touchSensorMsgs/$', views.TouchSensorMsgList.as_view(), name='touchSensorMsg_list'),
     url(r'^touchSensorMsgs/(?P<pk>[0-9]+)$', views.TouchSensorMsgDetail.as_view(), name='touchSensorMsg_detail'),
 
+    url(r'^tiltSensors/$', views.TiltSensorList.as_view(), name='tiltSensor_list'),
+    url(r'^tiltSensors/(?P<pk>[0-9]+)$', views.TiltSensorDetail.as_view(), name='tiltSensor_detail'),
+
+    url(r'^tiltSensorMsgs/$', views.TiltSensorMsgList.as_view(), name='tiltSensorMsg_list'),
+    url(r'^tiltSensorMsgs/(?P<pk>[0-9]+)$', views.TiltSensorMsgDetail.as_view(), name='tiltSensorMsg_detail'),
+
+    url(r'^humiditySensors/$', views.HumiditySensorList.as_view(), name='humiditySensor_list'),
+    url(r'^humiditySensors/(?P<pk>[0-9]+)$', views.HumiditySensorDetail.as_view(), name='humiditySensor_detail'),
+
+    url(r'^humiditySensorMsgs/$', views.HumiditySensorMsgList.as_view(), name='humiditySensorMsg_list'),
+    url(r'^humiditySensorMsgs/(?P<pk>[0-9]+)$', views.HumiditySensorMsgDetail.as_view(), name='humiditySensorMsg_detail'),
+
+
+    url(r'^infraredSensors/$', views.InfraredSensorList.as_view(), name='infraredSensor_list'),
+    url(r'^infraredSensors/(?P<pk>[0-9]+)$', views.InfraredSensorDetail.as_view(), name='infraredSensor_detail'),
+
+    url(r'^infraredSensorMsgs/$', views.InfraredSensorMsgList.as_view(), name='infraredSensorMsg_list'),
+    url(r'^infraredSensorMsgs/(?P<pk>[0-9]+)$', views.InfraredSensorMsgDetail.as_view(), name='infraredSensorMsg_detail'),
+
+
+    url(r'^lightSensors/$', views.LightSensorList.as_view(), name='lightSensor_list'),
+    url(r'^lightSensors/(?P<pk>[0-9]+)$', views.LightSensorDetail.as_view(), name='lightSensor_detail'),
+
+    url(r'^lightSensorMsgs/$', views.LightSensorMsgList.as_view(), name='lightSensorMsg_list'),
+    url(r'^lightSensorMsgs/(?P<pk>[0-9]+)$', views.LightSensorMsgDetail.as_view(), name='lightSensorMsg_detail'),
+
+
+    url(r'^vibrationSensors/$', views.VibrationSensorList.as_view(), name='vibrationSensor_list'),
+    url(r'^vibrationSensors/(?P<pk>[0-9]+)$', views.VibrationSensorDetail.as_view(), name='vibrationSensor_detail'),
+
+    url(r'^vibrationSensorMsgs/$', views.VibrationSensorMsgList.as_view(), name='vibrationSensorMsg_list'),
+    url(r'^vibrationSensorMsgs/(?P<pk>[0-9]+)$', views.VibrationSensorMsgDetail.as_view(), name='vibrationSensorMsg_detail'),
+
+
+    url(r'^switchSensors/$', views.SwitchSensorList.as_view(), name='switchSensor_list'),
+    url(r'^switchSensors/(?P<pk>[0-9]+)$', views.SwitchSensorDetail.as_view(), name='switchSensor_detail'),
+
+    url(r'^switchSensorMsgs/$', views.SwitchSensorMsgList.as_view(), name='switchSensorMsg_list'),
+    url(r'^switchSensorMsgs/(?P<pk>[0-9]+)$', views.SwitchSensorMsgDetail.as_view(), name='switchSensorMsg_detail'),
+
     # url(r'^users/$', views.UserList.as_view(), name='user_list'),
     # url(r'^users/(?P<pk>[0-9]+)$', views.UserDetail.as_view(), name='user_detail'),
     url(r'^register/$',views.register,name='register'),
     url(r'^api-token-auth/', authViews.obtain_auth_token),
-    url(r'^jet/', include('jet.urls', 'jet')),
     url(r'^$', schema_view),
 ]
