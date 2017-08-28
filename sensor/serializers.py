@@ -3,6 +3,8 @@ from .models import TemperatureSensor,FlameSensor,HeartbeatSensor,HallMagneticSe
 from .models import TemperatureMsg,FlameMsg,HeartbeatMsg,HallSensorMsg,SoundSensorMsg,TouchSensorMsg,HumiditySensorMsg
 import models
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
 
 class TemperatureMsgSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,7 +18,7 @@ class TemperatureSensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = TemperatureSensor
         fields = ('id', 'deviceId', 'type', 'maxTemperature', 'minTemperature', 'create_time', 'temperatureMsgs')
-
+        
 
 class FlameMsgSerializer(serializers.ModelSerializer):
     class Meta:

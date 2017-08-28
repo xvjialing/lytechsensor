@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from .models import TemperatureSensor, FlameSensor,HeartbeatSensor,HallMagneticSensor,SoundSensor,TouchSensor,HumiditySensor,InfraredSensor,LightSensor,VibrationSensor
 from .models import TemperatureMsg,FlameMsg,HeartbeatMsg,HallSensorMsg,SoundSensorMsg,TouchSensorMsg
@@ -10,11 +12,13 @@ from serializers import TemperatureSensorSerializer,FlameSensorSerializer,Heartb
 from serializers import TemperatureMsgSerializer,FlameMsgSerializer,HeartbeatMsgSerializer,HallSensorMsgSerializer,SoundSensorMsgSerializer,TouchSensorMsgSerializer
 import models
 import serializers
-from rest_framework import mixins,generics
+from rest_framework import mixins, generics, status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from dss.Serializer import serializer
 import json
+from django.contrib.auth import get_user_model
+
 # 第三种方式：装饰器 api_view
 # @api_view(['GET', 'POST'])
 # @permission_classes((permissions.AllowAny,))
@@ -63,6 +67,9 @@ def register(request):
         password=request.POST.get('password')
         email=request.POST.get('email')
         user=User.objects.create_user(username,email,password)
+
+
+
         # s=user.save()
         return HttpResponse(json.dumps(user), content_type="application/json")
     else:
@@ -813,3 +820,4 @@ class SwitchSensorMsgDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+

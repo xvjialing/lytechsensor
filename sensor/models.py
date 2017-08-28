@@ -8,7 +8,6 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 
-
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
@@ -124,7 +123,6 @@ class SoundSensor(models.Model):
     def __unicode__(self):
         return self.deviceId
 
-
 class SoundSensorMsg(models.Model):
     xAxis=models.FloatField(null=False)
     yAxis=models.FloatField(null=False)
@@ -220,7 +218,6 @@ class InfraredSensor(models.Model):
     def __unicode__(self):
         return self.deviceId
 
-
 class InfraredSensorMsg(models.Model):
     status = models.BooleanField(default=False)
     pub_time = models.DateField(auto_now_add=True, null=True)
@@ -267,7 +264,6 @@ class VibrationSensor(models.Model):
 
     def __unicode__(self):
         return self.deviceId
-
 
 class VibrationSensorMsg(models.Model):
     xAxis = models.FloatField(null=False)
