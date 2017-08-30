@@ -17,3 +17,4 @@ sensor/models.pyc
 sensor/serializers.pyc
 sensor/urls.pyc
 sensor/views.pyc
+/sensor/migrations
